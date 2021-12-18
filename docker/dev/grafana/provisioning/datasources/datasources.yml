@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: server
+    url: http://balancer_influxdb:8086
+    uid: 0f2ZOdTnk
+    secureJsonData:
+      token: token
+    jsonData:
+      version: Flux
+      organization: balancer
+      defaultBucket: balancer

@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+
   balancer_influxdb:
     image: influxdb:2.1
     ports:
@@ -9,5 +10,22 @@ services:
       - ../env.influxdb
     volumes:
       - ./influxdb/data:/var/lib/influxdb2
+
+  balancer_grafana:
+    image: grafana/grafana-oss:8.3.3
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - balancer_influxdb
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+
   balancer_python:
     image: python:3.10.1-alpine3.15
+    depends_on:
+      - balancer_influxdb
