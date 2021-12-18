@@ -13,9 +13,8 @@ class Database:
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
 
     def save_real_time_measure(self, measure: ActualMeasure) -> None:
-        point = (Point("actual_measure")
-                 .field("grid", measure.grid)
-                 .field("home", measure.home)
-                 .field("pv", measure.pv))
+        point_grid = Point("actual_measure").field("value", measure.grid).tag("kind", "grid")
+        point_home = Point("actual_measure").field("value", measure.home).tag("kind", "home")
+        point_pv = Point("actual_measure").field("value", measure.pv).tag("kind", "pv")
 
-        self.write_api.write(bucket=self.BUCKET, record=point)
+        self.write_api.write(bucket=self.BUCKET, record=[point_grid, point_home, point_pv])
