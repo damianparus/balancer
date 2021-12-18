@@ -19,10 +19,3 @@ class Database:
                  .field("pv", measure.pv))
 
         self.write_api.write(bucket=self.BUCKET, record=point)
-
-        query_api = self.client.query_api()
-        tables = query_api.query('from(bucket:"balancer") |> range(start: -10m)')
-        for table in tables:
-            print(table)
-            for row in table.records:
-                print(row.values)
