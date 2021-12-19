@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class ActualMeasure:
+class RealTimePowerMeasure:
     grid: float
     home: float
     pv: float

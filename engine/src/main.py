@@ -9,7 +9,7 @@ import requests as requests
 
 from config import ConfigLoader
 from database import Database
-from measure import ActualMeasure
+from measure import RealTimePowerMeasure
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO, datefmt='%Y/%m/%d %H:%M:%S')
 
@@ -28,7 +28,7 @@ while True:
     try:
         response = requests.get(metric_powerflow_url, verify=False, timeout=3)
         response_data = response.json()
-        actual_measure = ActualMeasure(
+        actual_measure = RealTimePowerMeasure(
             grid=float(response_data['Body']['Data']['Site']['P_Grid']),
             pv=float(response_data['Body']['Data']['Site']['P_PV']) if response_data['Body']['Data']['Site']['P_PV'] is not None else 0.0,
             home=float(response_data['Body']['Data']['Site']['P_Load'])*-1
