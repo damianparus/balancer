@@ -30,7 +30,7 @@ while True:
         response_data = response.json()
         actual_measure = ActualMeasure(
             grid=float(response_data['Body']['Data']['Site']['P_Grid']),
-            pv=float(response_data['Body']['Data']['Site']['P_PV']) if response_data['Body']['Data']['Site']['P_PV'] is not None else None,
+            pv=float(response_data['Body']['Data']['Site']['P_PV']) if response_data['Body']['Data']['Site']['P_PV'] is not None else 0.0,
             home=float(response_data['Body']['Data']['Site']['P_Load'])*-1
         )
         database.save_real_time_measure(actual_measure)
