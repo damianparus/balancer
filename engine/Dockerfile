@@ -9,4 +9,4 @@ COPY ./src/*.py src/
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["python", "src/main.py", "--fronius-url", "http://192.168.1.10/"]
+ENTRYPOINT ["python", "src/main.py", "--fronius-url", "http://192.168.1.10/", "--influxdb-url", "http://balancer_influxdb:8086"]

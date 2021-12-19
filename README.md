@@ -19,7 +19,7 @@ pip install -r engine/requirements.txt
 ### Run script locally
 
 ```shell
-python engine/src/main.py --fronius-url http://192.168.1.10/
+python engine/src/main.py --fronius-url http://192.168.1.10/ --influxdb-url http://localhost:8086
 ```
 
 ### Prepare Docker images
