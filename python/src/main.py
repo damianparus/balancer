@@ -1,3 +1,5 @@
+import sys
+import traceback
 from time import sleep
 from datetime import datetime
 
@@ -26,11 +28,11 @@ while True:
         response_data = response.json()
         actual_measure = ActualMeasure(
             grid=float(response_data['Body']['Data']['Site']['P_Grid']),
-            pv=float(response_data['Body']['Data']['Site']['P_PV']),
+            pv=float(response_data['Body']['Data']['Site']['P_PV']) if response_data['Body']['Data']['Site']['P_PV'] is not None else None,
             home=float(response_data['Body']['Data']['Site']['P_Load'])*-1
         )
         database.save_real_time_measure(actual_measure)
         logging.info(actual_measure)
     except Exception:
-        logging.error("Measure exception")
+        logging.error("Exception: %s", traceback.format_exc())
     sleep(5)
