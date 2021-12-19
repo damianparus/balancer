@@ -10,6 +10,7 @@ services:
       - ./influxdb/environment
     volumes:
       - ./influxdb/data:/var/lib/influxdb2
+    restart: unless-stopped
 
   balancer_grafana:
     image: grafana/grafana-oss:8.3.3
@@ -25,8 +26,10 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/main.json
+    restart: unless-stopped
 
   balancer_engine:
     build: ./engine/
     depends_on:
       - balancer_influxdb
+    restart: unless-stopped
