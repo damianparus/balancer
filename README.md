@@ -32,5 +32,10 @@ docker compose build
 ## Run
 
 ```shell
-docker compose up
+docker compose up -d
+```
+
+or
+```shell
+docker-compose up -d
 ```
