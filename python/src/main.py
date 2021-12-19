@@ -26,9 +26,9 @@ while True:
     #TODO parse error
     response_data = response.json()
     actual_measure = ActualMeasure(
-        grid=response_data['Body']['Data']['Site']['P_Grid'],
-        pv=response_data['Body']['Data']['Site']['P_PV'],
-        home=response_data['Body']['Data']['Site']['P_Load']
+        grid=float(response_data['Body']['Data']['Site']['P_Grid']),
+        pv=float(response_data['Body']['Data']['Site']['P_PV']),
+        home=float(response_data['Body']['Data']['Site']['P_Load'])
     )
     database.save_real_time_measure(actual_measure)
     logging.info(actual_measure)
