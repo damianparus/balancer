@@ -7,17 +7,17 @@ services:
     ports:
       - "8086:8086"
     env_file:
-      - ./docker/influxdb/environment
+      - ./influxdb/environment
     volumes:
-      - ./docker/influxdb/data:/var/lib/influxdb2
+      - ./influxdb/data:/var/lib/influxdb2
 
   balancer_grafana:
     image: grafana/grafana-oss:8.3.3
     ports:
       - "3000:3000"
     volumes:
-      - ./docker/grafana/data:/var/lib/grafana
-      - ./docker/grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
     depends_on:
       - balancer_influxdb
     environment:
@@ -27,6 +27,6 @@ services:
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/main.json
 
   balancer_engine:
-    build: ./docker/engine/
+    build: ./engine/
     depends_on:
       - balancer_influxdb

@@ -13,11 +13,11 @@ conda activate balancer
 ### Install packages
 
 ```bash
-pip install -r python/requirements.txt
+pip install -r engine/requirements.txt
 ```
 
 ### Run script locally
 
 ```bash
-python python/src/main.py --fronius-url http://192.168.1.10/
+python engine/src/main.py --fronius-url http://192.168.1.10/
 ```
