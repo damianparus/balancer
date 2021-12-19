@@ -12,12 +12,25 @@ conda activate balancer
 
 ### Install packages
 
-```bash
+```shell
 pip install -r engine/requirements.txt
 ```
 
 ### Run script locally
 
-```bash
+```shell
 python engine/src/main.py --fronius-url http://192.168.1.10/
+```
+
+### Prepare Docker images
+
+When you change the engine Dockerfile you have to rebuild the engine docker image with the command below! docker compose up does not rebuild the image itself!
+```shell
+docker compose build
+```
+
+## Run
+
+```shell
+docker compose up
 ```
