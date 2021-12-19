@@ -2,14 +2,22 @@
 
 ## Development
 
-### Create virtual environment
+### Create and activate virtual environment
 
-`conda create --name balancer python=3.10`
+```bash
+conda create --name balancer python=3.10
+conda activate balancer
+```
+
 
 ### Install packages
 
-`pip install -r python/requirements.txt`
+```bash
+pip install -r python/requirements.txt
+```
 
 ### Run script locally
 
-`python python/src/main.py --fronius-url http://192.168.1.10/`
+```bash
+python python/src/main.py --fronius-url http://192.168.1.10/
+```
