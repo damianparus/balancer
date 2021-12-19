@@ -21,15 +21,16 @@ database = Database()
 
 while True:
     current_time = datetime.now()
-    #TODO client error
-    response = requests.get(metric_powerflow_url, verify=False, timeout=3)
-    #TODO parse error
-    response_data = response.json()
-    actual_measure = ActualMeasure(
-        grid=float(response_data['Body']['Data']['Site']['P_Grid']),
-        pv=float(response_data['Body']['Data']['Site']['P_PV']),
-        home=float(response_data['Body']['Data']['Site']['P_Load'])*-1
-    )
-    database.save_real_time_measure(actual_measure)
-    logging.info(actual_measure)
-    sleep(1)
+    try:
+        response = requests.get(metric_powerflow_url, verify=False, timeout=3)
+        response_data = response.json()
+        actual_measure = ActualMeasure(
+            grid=float(response_data['Body']['Data']['Site']['P_Grid']),
+            pv=float(response_data['Body']['Data']['Site']['P_PV']),
+            home=float(response_data['Body']['Data']['Site']['P_Load'])*-1
+        )
+        database.save_real_time_measure(actual_measure)
+        logging.info(actual_measure)
+    except Exception:
+        logging.error("Measure exception")
+    sleep(5)
