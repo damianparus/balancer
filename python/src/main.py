@@ -28,7 +28,7 @@ while True:
     actual_measure = ActualMeasure(
         grid=float(response_data['Body']['Data']['Site']['P_Grid']),
         pv=float(response_data['Body']['Data']['Site']['P_PV']),
-        home=float(response_data['Body']['Data']['Site']['P_Load'])
+        home=float(response_data['Body']['Data']['Site']['P_Load'])*-1
     )
     database.save_real_time_measure(actual_measure)
     logging.info(actual_measure)
