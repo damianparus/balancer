@@ -15,6 +15,7 @@ class DataSaver:
                  .field("real_time_grid", real_time_power_measure_data.grid)
                  .field("real_time_home", real_time_power_measure_data.home)
                  .field("real_time_pv", real_time_power_measure_data.pv)
+                 .field("total_production", real_time_power_measure_data.total_production)
                  .field("meter_energy_consumed", meter_measure_data.energy_consumed)
                  .field("meter_energy_produced", meter_measure_data.energy_produced)
                  .field("meter_frequency_average", meter_measure_data.frequency_average)

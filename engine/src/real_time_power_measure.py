@@ -10,6 +10,7 @@ class RealTimePowerMeasureData:
     grid: float
     home: float
     pv: float
+    total_production: float
 
 
 class RealTimePowerMeasure:
@@ -23,7 +24,8 @@ class RealTimePowerMeasure:
         measure = RealTimePowerMeasureData(
             grid=float(response_data['Body']['Data']['Site']['P_Grid']),
             pv=float(response_data['Body']['Data']['Site']['P_PV']) if response_data['Body']['Data']['Site']['P_PV'] is not None else 0.0,
-            home=float(response_data['Body']['Data']['Site']['P_Load']) * -1
+            home=float(response_data['Body']['Data']['Site']['P_Load']) * -1,
+            total_production=float(response_data['Body']['Data']['Site']["E_Total"])
         )
         logging.info(measure)
         return measure
