@@ -26,16 +26,24 @@ python engine/src/main.py --fronius-url http://192.168.1.10/ --influxdb-url http
 
 When you change the engine Dockerfile you have to rebuild the engine docker image with the command below! docker compose up does not rebuild the image itself!
 ```shell
-docker compose build
+docker-compose build
 ```
 
-## Run
+## Deploy
+
+### Run
 
 ```shell
-docker compose up -d
+docker-compose up -d
 ```
 
-or
+### Update
+
+### Run
+
 ```shell
+docker-compose down --volumes
+git pull
+docker-compose build
 docker-compose up -d
 ```
