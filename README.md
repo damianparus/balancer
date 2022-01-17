@@ -53,6 +53,15 @@ docker-compose build
 docker-compose up -d
 ```
 
+After correct installaction three images should be running:
+```shell
+root@indy:/home/halley# docker ps
+CONTAINER ID   IMAGE                       COMMAND                  CREATED       STATUS       PORTS                    NAMES
+2803d5431973   grafana/grafana-oss:8.3.3   "/run.sh"                2 weeks ago   Up 2 weeks   0.0.0.0:3000->3000/tcp   balancer_balancer_grafana_1
+bf8b0562115a   balancer_balancer_engine    "python src/main.py …"   2 weeks ago   Up 2 weeks                            balancer_balancer_engine_1
+9df92cd4a9d2   influxdb:2.1                "/entrypoint.sh infl…"   2 weeks ago   Up 2 weeks   0.0.0.0:8086->8086/tcp   balancer_balancer_influxdb_1
+```
+
 ### Grafana dashboards
 
 ![Screenshot](docs/img/grafana1.png?raw=true "Screenshot")
