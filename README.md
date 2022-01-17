@@ -53,7 +53,7 @@ docker-compose build
 docker-compose up -d
 ```
 
-After correct installaction three images should be running:
+After correct installation three images should be running:
 ```shell
 root@indy:/home/halley# docker ps
 CONTAINER ID   IMAGE                       COMMAND                  CREATED       STATUS       PORTS                    NAMES
