@@ -3,6 +3,7 @@ version: "3.9"
 services:
 
   balancer_influxdb:
+    container_name: balancer_influxdb
     image: influxdb:2.1
     ports:
       - "8086:8086"
@@ -10,9 +11,10 @@ services:
       - ./influxdb/environment
     volumes:
       - ./influxdb/data:/var/lib/influxdb2
-    restart: unless-stopped
+    restart: always
 
   balancer_grafana:
+    container_name: balancer_grafana
     image: grafana/grafana-oss:8.3.3
     ports:
       - "3000:3000"
@@ -26,10 +28,11 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/main.json
-    restart: unless-stopped
+    restart: always
 
   balancer_engine:
+    container_name: balancer_engine
     build: ./engine/
     depends_on:
       - balancer_influxdb
-    restart: unless-stopped
+    restart: always
