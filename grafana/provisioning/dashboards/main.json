@@ -425,7 +425,7 @@
             "uid": "0f2ZOdTnk"
           },
           "hide": false,
-          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with \"Accumulated energy\": (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0) }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\"])\n",
+          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with \"Accumulated energy\": (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0)+${additional_power_to_use}*1000.0 }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\"])\n",
           "refId": "B"
         }
       ],
@@ -1820,42 +1820,42 @@
       {
         "hide": 2,
         "name": "internal_meter_start_energy_produced",
-        "query": "11162913.0",
+        "query": "24821733.0",
         "skipUrlSync": false,
         "type": "constant"
       },
       {
         "hide": 2,
         "name": "internal_meter_start_energy_consumed",
-        "query": "8394031.0",
+        "query": "16343221.0",
         "skipUrlSync": false,
         "type": "constant"
       },
       {
         "hide": 2,
         "name": "external_meter_bill_energy_produced",
-        "query": "5301.0",
+        "query": "19322.0",
         "skipUrlSync": false,
         "type": "constant"
       },
       {
         "hide": 2,
         "name": "external_meter_bill_energy_consumed",
-        "query": "5039.0",
+        "query": "15941.0",
         "skipUrlSync": false,
         "type": "constant"
       },
       {
         "hide": 2,
         "name": "external_meter_start_energy_produced",
-        "query": "11055.0",
+        "query": "25120.0",
         "skipUrlSync": false,
         "type": "constant"
       },
       {
         "hide": 2,
         "name": "external_meter_start_energy_consumed",
-        "query": "8962.0",
+        "query": "18868.0",
         "skipUrlSync": false,
         "type": "constant"
       },
@@ -1863,6 +1863,13 @@
         "hide": 2,
         "name": "rate_of_return",
         "query": "0.8",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "hide": 2,
+        "name": "additional_power_to_use",
+        "query": "570.0",
         "skipUrlSync": false,
         "type": "constant"
       }
