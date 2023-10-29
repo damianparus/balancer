@@ -893,7 +893,7 @@
       },
       "id": 24,
       "panels": [],
-      "title": "Balance - conumption",
+      "title": "Balance - consumption",
       "type": "row"
     },
     {
@@ -1265,6 +1265,380 @@
         "x": 0,
         "y": 40
       },
+      "id": 33,
+      "panels": [],
+      "title": "Accumulative energy balance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "0f2ZOdTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 180000,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "${__field.name}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total consumed"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 0
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "0f2ZOdTnk"
+          },
+          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: 1d, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with _value: (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0) }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\"])\n  |> difference()",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "60d",
+      "title": "Day balance",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "0f2ZOdTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 180000,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "${__field.name}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total consumed"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 0
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 12,
+        "y": 41
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "0f2ZOdTnk"
+          },
+          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: 1mo, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with _value: (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0) }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\"])\n  |> difference()",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "2y",
+      "title": "Month balance",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "0f2ZOdTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 180000,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "${__field.name}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total consumed"
+            },
+            "properties": [
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 0
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 20,
+        "y": 41
+      },
+      "hideTimeOverride": false,
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "0f2ZOdTnk"
+          },
+          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: 1y, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with _value: (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0) }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\"])\n  |> difference()",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "3y",
+      "title": "Year balance",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 50
+      },
       "id": 7,
       "panels": [],
       "title": "Physical details",
@@ -1330,7 +1704,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 51
       },
       "id": 3,
       "options": {
@@ -1416,7 +1790,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 51
       },
       "id": 8,
       "options": {
@@ -1502,7 +1876,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 60
       },
       "id": 9,
       "options": {
@@ -1588,7 +1962,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 60
       },
       "id": 10,
       "options": {
@@ -1620,7 +1994,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 69
       },
       "id": 12,
       "panels": [
