@@ -2268,7 +2268,7 @@
       {
         "hide": 2,
         "name": "positive_energy_balance_date",
-        "query": "2024-04-18T00:00:00Z",
+        "query": "2024-04-01T00:00:00Z",
         "skipUrlSync": false,
         "type": "constant"
       },
