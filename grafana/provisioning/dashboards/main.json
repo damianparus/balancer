@@ -413,7 +413,7 @@
             "uid": "0f2ZOdTnk"
           },
           "hide": false,
-          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with \"standard_usage_prediction\": (float(v: (int(v: ${positive_energy_balance_date}) - int(v: r._time)))/1000000000.0*3600.0/${standard_energy_grid_usage_per_day} ) }))\n  |> map(fn: (r) => ({ r with \"accumulated_energy\": (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0)+${additional_power_to_use}*1000.0 }))\n  |> map(fn: (r) => ({ r with \"Accumulated energy\": r.accumulated_energy }))\n  |> map(fn: (r) => ({ r with \"Energy to use\": r.standard_usage_prediction - r.accumulated_energy }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\", \"standard_usage_prediction\", \"accumulated_energy\"])\n",
+          "query": "from(bucket: \"balancer\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"real_time\")\n  |> filter(fn: (r) => r[\"_field\"] == \"meter_energy_produced\" or r[\"_field\"] == \"meter_energy_consumed\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: true)\n  |> pivot(\n    rowKey:[\"_time\"],\n    columnKey: [\"_field\"],\n    valueColumn: \"_value\"\n  )\n  |> map(fn: (r) => ({ r with \"standard_usage_prediction\": (float(v: (int(v: ${positive_energy_balance_date}) - int(v: r._time)))/1000000000.0/86400.0*${standard_energy_grid_usage_per_day} ) }))\n  |> map(fn: (r) => ({ r with \"accumulated_energy\": (r.meter_energy_produced-${internal_meter_start_energy_produced})*${rate_of_return}-(r.meter_energy_consumed-${internal_meter_start_energy_consumed})+(${external_meter_start_energy_produced}*1000.0-${external_meter_bill_energy_produced}*1000.0)*${rate_of_return}-(${external_meter_start_energy_consumed}*1000.0-${external_meter_bill_energy_consumed}*1000.0)+${additional_power_to_use}*1000.0 }))\n  |> map(fn: (r) => ({ r with \"Accumulated energy\": r.accumulated_energy }))\n  |> map(fn: (r) => ({ r with \"Energy to use\": r.accumulated_energy - r.standard_usage_prediction }))\n  |> drop(columns: [\"meter_energy_produced\", \"meter_energy_consumed\", \"standard_usage_prediction\", \"accumulated_energy\"])\n",
           "refId": "B"
         }
       ],
@@ -2245,7 +2245,7 @@
       {
         "hide": 2,
         "name": "standard_energy_grid_usage_per_day",
-        "query": "18000.0",
+        "query": "13000.0",
         "skipUrlSync": false,
         "type": "constant"
       }
